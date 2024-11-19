@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Certificate</title>
+</head>
+<body>
+<h1>Generate Certificate</h1>
+
+<div>
+    <label for="name">Student Name:</label>
+    <input type="text" id="name" placeholder="Enter student name">
+</div>
+
+<button onclick="generateCertificate()">Get Certificate</button>
+
+<canvas id="certificateCanvas" width="800" height="600"></canvas>
+
+<script>
+    function generateCertificate() {
+        const name = document.getElementById("name").value;
+
+        if (!name) {
+            alert("Please enter the student's name.");
+            return;
+        }
+
+        const canvas = document.getElementById("certificateCanvas");
+        const context = canvas.getContext("2d");
+
+        // Load background image or draw custom background
+        const backgroundImage = new Image();
+        backgroundImage.src = "ce.png";
+        backgroundImage.onload = function() {
+            context.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+            // Set font styles
+            context.font = " 44pt Mono-type-Corsica";
+
+            context.fillStyle = "black";
+            context.textAlign = "center";
+
+            // Draw student name
+            context.fillText(name, canvas.width / 2, 370);
+            context.font = " bold 16.5px Mono-type-Corsica";
+            context.fillStyle = "black";
+            // Draw course name
+            context.fillText("C++", (canvas.width / 2)+10, 420);
+
+            // Draw date
+            context.font = " 15pt Mono-type-Corsica";
+            context.fillStyle = "black";
+            const currentDate = new Date();
+            context.fillText( currentDate.toDateString(), (canvas.width / 4)+10,530 );
+            context.fillText("Trevor Payne", (canvas.width *3 / 4)-10,530 );
+            // Ask user to save or display the certificate
+            const confirmation = confirm("Do you want to save the certificate as an image?");
+            if (confirmation) {
+                // Save the certificate as an image
+                const link = document.createElement("a");
+                link.href = canvas.toDataURL("image/png");
+                link.download = "certificate.png";
+                link.click();
+            } else {
+                // Display the certificate on the web page
+                const certificateImage = new Image();
+                certificateImage.src = canvas.toDataURL("image/png");
+                document.body.appendChild(certificateImage);
+            }
+        };
+    }
+</script>
+</body>
+</html>
